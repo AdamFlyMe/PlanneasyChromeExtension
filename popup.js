@@ -125,6 +125,7 @@ function loadNotes() {
             console.log(items);
             cards.innerHTML = "";
             for (let key in items) {
+                chrome.storage.local.set({[key]: items[key]});
                 let title = "";
                 let category = "";
                 let description = "";
@@ -260,12 +261,15 @@ $( document ).ready(function() {
         let id = $(event.relatedTarget)[0].dataset.entryid;
         chrome.storage.local.get(null, function (items) {
             entry = items[id];
-            if(entry.hasOwnProperty('title')){
+            if(entry.hasOwnProperty('title')) {
                 editNoteEntryId.innerHTML = id;
                 editNoteTitle.value = entry.title;
-                editNoteCategory.value = entry.category;
-                editNoteDescription.value = entry.description;
-                editNoteColor.value = entry.color;
+                if(entry.hasOwnProperty('category'))
+                    editNoteCategory.value = entry.category;
+                if(entry.hasOwnProperty('description'))
+                    editNoteDescription.value = entry.description;
+                if(entry.hasOwnProperty('color'))
+                    editNoteColor.value = entry.color;
             }
             else{
                 $('#editNote').modal("hide");
