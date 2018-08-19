@@ -15,7 +15,6 @@ let editNoteColor = document.getElementById('editNoteColor');
 let removeNoteButton = document.getElementById('removeNoteButton');
 let removeNoteEntryId = document.getElementById('removeNoteEntryId');
 let removeNotesButton = document.getElementById('removeNotesButton');
-let deleteButton = document.getElementById('deleteNote');
 
 function addNote(){
     if (newNoteTitle.value != "" && newNoteDescription.value != "") {
@@ -214,33 +213,11 @@ function handleLogin(){
                 "    <h5 class=\"card-title\">Log in</h5>\n" +
                 "    <p class=\"card-text\">Please sign in with Google to use the extension.</p>\n" +
                 "    <button id=\"loginButton\" type=\"button\" class=\"btn btn-outline-primary\">Login</button>\n" +
-                "  </div>\n";
+                "  </div></div></div>\n";
             document.getElementById("loginButton").onclick = function() {
-                firebase.auth().signInWithPopup(provider).then(function (result) {
-                    var token = result.credential.accessToken;
-                    var user = result.user;
-                    console.log(user);
-                    loadNotes();
-                    navOptions.style.visibility = "visible";
-                    newNoteButton.onclick = addNote;
-                    editNoteButton.onclick = modifyNote;
-                    removeNoteButton.onclick = deleteNote;
-                    removeNotesButton.onclick = deleteNotes;
-                    alert.innerHTML = "<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
-                        "  <strong>Success!</strong> Logged in successfully." +
-                        "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
-                        "    <span aria-hidden=\"true\">&times;</span>\n" +
-                        "  </button>\n" +
-                        "</div>\n";
-                }).catch(function (error) {
-                    console.log(error);
-                    alert.innerHTML = "<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n" +
-                        "  <strong>Failure!</strong> Please try again." +
-                        "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
-                        "    <span aria-hidden=\"true\">&times;</span>\n" +
-                        "  </button>\n" +
-                        "</div>\n";
-                });
+                chrome.runtime.sendMessage({greeting: "handleLogin"},
+                    function (response) {
+                    });
             }
         }
     });
@@ -257,7 +234,11 @@ $( document ).ready(function() {
             deleteNote(id);
         });
     });
+    $('#newNote').on('show.bs.modal', function (event) {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
     $('#editNote').on('show.bs.modal', function (event) {
+        $('[data-toggle="tooltip"]').tooltip("hide");
         let id = $(event.relatedTarget)[0].dataset.entryid;
         chrome.storage.local.get(null, function (items) {
             entry = items[id];
@@ -283,6 +264,7 @@ $( document ).ready(function() {
         });
     });
     $('#removeNote').on('show.bs.modal', function (event) {
+        $('[data-toggle="tooltip"]').tooltip("hide");
         let id = $(event.relatedTarget)[0].dataset.entryid;
         chrome.storage.local.get(null, function (items) {
             entry = items[id];
@@ -300,6 +282,28 @@ $( document ).ready(function() {
             }
         });
     });
+    $('#removeNotes').on('show.bs.modal', function (event){
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
+    $('#signOut').click(function(){
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        firebase.auth().signOut();
+        alert.innerHTML = "<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+            "  <strong>Successfully signed out!</strong> Please sign in again to use Planneasy.\n" +
+            "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+            "    <span aria-hidden=\"true\">&times;</span>\n" +
+            "  </button>\n" +
+            "</div>\n";
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+});
+
+chrome.runtime.onMessage.addListener(function(request,sender,sendResponse) {
+    if (request.greeting === "loginHandled") {
+        handleLogin();
+    }
 });
 
 var config = {

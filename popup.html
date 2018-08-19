@@ -20,14 +20,19 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
     <ul id="navOptions" class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <a id="deleteNote" class="nav-link" href="#"><i class="material-icons" title="Delete" data-toggle="modal" data-target="#removeNotes">
+        <li class="nav-item" id="deleteNavItem" data-toggle="tooltip" data-placement="top" title="Delete">
+            <a id="deleteNote" class="nav-link" href="#"><i class="material-icons" data-toggle="modal" data-target="#removeNotes">
                 delete
             </i></a>
         </li>
-        <li class="nav-item">
-            <a id="addNote" class="nav-link" href="#"><i class="material-icons" title="Add" data-toggle="modal" data-target="#newNote">
+        <li class="nav-item" id="addNavItem" data-toggle="tooltip" data-placement="top" title="Add">
+            <a id="addNote" class="nav-link" href="#"><i class="material-icons" data-toggle="modal" data-target="#newNote">
                 note_add
+            </i></a>
+        </li>
+        <li class="nav-item" id="signOutNavItem" data-toggle="tooltip" data-placement="top" title="Sign Out">
+            <a id="signOut" class="nav-link" href="#"><i class="material-icons">
+                person
             </i></a>
         </li>
     </ul>
@@ -186,10 +191,6 @@
 <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.3.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.3.1/firebase-messaging.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.3.1/firebase-functions.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.3.1/firebase-storage.js"></script>
 
 
 <script src="jquery-3.3.1.slim.min.js"></script>
